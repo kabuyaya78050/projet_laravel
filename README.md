@@ -247,3 +247,176 @@ resources/views/
 - Les réponses aux questions théoriques sont à rédiger directement dans ce fichier `README.md`, sous chaque question.
 
 **Bonne évaluation !**
+
+
+# 📘 RÉPONSES THÉORIQUES — LARAVEL BLOG & DASHBOARD
+
+---
+
+# ✅ QUESTION 1 — Page d’accueil
+
+## Passer plusieurs variables à une vue
+
+return view('page', compact('articles', 'categories'));
+
+ou
+
+return view('page', [
+    'articles' => $articles,
+    'categories' => $categories
+]);
+
+---
+
+## Affichage sécurisé Blade (XSS)
+
+{{ $variable }}
+
+---
+
+## @foreach
+
+@foreach($articles as $article)
+    {{ $article->title }}
+@endforeach
+
+---
+
+# ✅ QUESTION 2 — Page Articles
+
+## Différence Post::all() et limit()
+
+Post::all() → récupère toutes les données
+Post::limit(10)->orderByDesc('id')->get() → limite et optimise les résultats
+
+---
+
+## Compter les enregistrements
+
+Post::count();
+
+---
+
+## @forelse
+
+@forelse($articles as $article)
+    {{ $article->title }}
+@empty
+    <p>Aucun article disponible</p>
+@endforelse
+
+---
+
+# ✅ QUESTION 3 — Catégories
+
+## Relation hasMany
+
+public function posts()
+{
+    return $this->hasMany(Post::class);
+}
+
+---
+
+## Différence count()
+
+$category->posts->count() → charge tous les posts
+$category->posts()->count() → requête SQL optimisée
+
+---
+
+## Eager loading (with)
+
+Category::with('posts')->get();
+
+---
+
+# ✅ QUESTION 4 — Page À propos
+
+## User model
+
+app/Models/User.php
+
+---
+
+## Condition Blade
+
+@if($users->isNotEmpty())
+    ...
+@endif
+
+---
+
+## @empty
+
+@empty($users)
+    <p>Aucun utilisateur</p>
+@endempty
+
+---
+
+ ✅ QUESTION 5 — Dashboard Index
+
+7 derniers articles
+
+Post::latest()->limit(7)->get();
+
+---
+
+Afficher une colonne
+
+{{ $article->title }}
+
+---
+
+created_at
+
+{{ $article->created_at->format('d/m/Y') }}
+
+---
+
+✅ QUESTION 6 — Dashboard Articles
+
+Relation optimisée
+
+Post::with('category')->get();
+
+---
+
+ Afficher catégorie
+
+{{ $article->category->name }}
+
+---
+
+Accesseur
+
+public function getStatusTextAttribute()
+{
+    return $this->status ? 'Publié' : 'Brouillon';
+}
+
+---
+
+  QUESTION 7 — Dashboard global
+
+ belongsTo (Commentaire → Post)
+
+public function post()
+{
+    return $this->belongsTo(Post::class);
+}
+
+---
+
+Afficher article d’un commentaire
+
+{{ $comment->post->title }}
+
+---
+
+ Récupérer tous les enregistrements
+
+Model::all();
+
+---
